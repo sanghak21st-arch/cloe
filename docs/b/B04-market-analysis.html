@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뭐할까 - 상권 조사 노드 상세</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+        }
+        
+        /* Left - Map Section */
+        .map-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .map-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .map-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+        }
+        
+        .map-tab.active {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        .map-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+        }
+        
+        .map-search input {
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            outline: none;
+            flex: 1;
+        }
+        
+        /* Map Container */
+        .map-container {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #fef3c7 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            width: 200px;
+        }
+        
+        .overlay-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .overlay-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .overlay-item-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+        
+        .overlay-item-icon.blue {
+            background: #3b82f6;
+        }
+        
+        .overlay-item-icon.yellow {
+            background: #f59e0b;
+        }
+        
+        .overlay-legend {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .legend-title {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+        
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+        }
+        
+        .legend-dot.red {
+            background: #ef4444;
+        }
+        
+        .legend-dot.green {
+            background: #10b981;
+        }
+        
+        /* Map Pins */
+        .map-pin {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .map-pin.pin-a {
+            top: 30%;
+            left: 35%;
+            border: 2px solid #3b82f6;
+        }
+        
+        .map-pin.pin-b {
+            top: 45%;
+            left: 50%;
+            border: 2px solid #6b7280;
+        }
+        
+        .map-pin.pin-c {
+            top: 55%;
+            left: 55%;
+            border: 2px solid #3b82f6;
+        }
+        
+        .pin-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .pin-marker.blue {
+            background: #3b82f6;
+        }
+        
+        .pin-marker.gray {
+            background: #6b7280;
+        }
+        
+        /* Data Table */
+        .data-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            padding: 14px 12px;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .location-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .location-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .location-marker.blue {
+            background: #3b82f6;
+        }
+        
+        .bar-chart {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100px;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .bar-fill.green {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        
+        .bar-fill.blue {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+        
+        .bar-fill.orange {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+        
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        /* Right Panel */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .panel-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #374151;
+        }
+        
+        .stat-value {
+            color: #111827;
+            font-weight: 600;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+        
+        .warning-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .warning-list {
+            list-style: none;
+        }
+        
+        .warning-list li {
+            padding: 4px 0;
+            font-size: 12px;
+            color: #a16207;
+            padding-left: 12px;
+            position: relative;
+        }
+        
+        .warning-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+        }
+        
+        .recommend-list {
+            list-style: none;
+        }
+        
+        .recommend-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .recommend-list li::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 4px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .panel-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            font-size: 13px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .footer-link:hover {
+            color: #2563eb;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.75);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">뭐할까</div>
+        <nav class="nav">
+            <span class="nav-item">진로탐색</span>
+            <span class="nav-item">창업탐색</span>
+            <span class="nav-item">학습루트</span>
+            <span class="nav-item">이용안내</span>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline">로그인</button>
+            <button class="btn btn-primary">시작하기 →</button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">상권 조사 노드 상세</h1>
+        <p class="page-subtitle">입지·유동인구·경쟁강도 데이터를 기반으로 실행 가능성을 평가합니다.</p>
+        
+        <div class="content-grid">
+            <!-- Left - Map Section -->
+            <div class="map-section">
+                <div class="map-tabs">
+                    <span class="map-tab active">☑ 상권 훈련</span>
+                    <span class="map-tab">경쟁</span>
+                    <span class="map-tab">존생</span>
+                    <span class="map-tab">경도</span>
+                </div>
+                
+                <div class="map-search">
+                    <span>🔍</span>
+                    <input type="text" placeholder="노드 검색">
+                    <span>›</span>
+                </div>
+                
+                <div class="map-container">
+                    <div class="map-overlay">
+                        <div class="overlay-title">
+                            <span>📊</span>
+                            <span>상권 조사</span>
+                        </div>
+                        <div class="overlay-item">
+                            <span class="overlay-item-icon blue"></span>
+                            <span>입대모 수준</span>
+                            <span style="margin-left: auto;">2추</span>
+                        </div>
+                        <div class="overlay-item">
+                            <span class="overlay-item-icon yellow"></span>
+                            <span>유동인구</span>
+                            <span style="margin-left: auto;">10-30만년</span>
+                        </div>
+                        <div class="overlay-item">
+                            <span class="overlay-item-icon blue"></span>
+                            <span>강입훈수</span>
+                        </div>
+                        <div class="overlay-legend">
+                            <div class="legend-title">응원산구 설리도</div>
+                            <div class="legend-items">
+                                <span class="legend-item"><span class="legend-dot red"></span> 증원산구</span>
+                                <span class="legend-item"><span class="legend-dot green"></span> 증원역</span>
+                                <span class="legend-item"><span class="legend-dot green"></span> 유료지</span>
+                                <span class="legend-item"><span class="legend-dot green"></span> 장원리</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 12px; color: #6b7280;">
+                            <div>입대률·수준</div>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <span>유동인구</span>
+                                <div class="bar-chart"><div class="bar-fill blue" style="width: 60%;"></div></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <span>증원권토</span>
+                                <div class="bar-chart"><div class="bar-fill green" style="width: 40%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-pin pin-a">
+                        <span class="pin-marker blue">A</span>
+                        <span>후보지 A</span>
+                    </div>
+                    <div class="map-pin pin-b">
+                        <span class="pin-marker gray">📍</span>
+                        <span>후보지 B</span>
+                    </div>
+                    <div class="map-pin pin-c">
+                        <span class="pin-marker blue">C</span>
+                        <span>후보지 C</span>
+                    </div>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>위치</th>
+                            <th>입대모</th>
+                            <th>유동인구</th>
+                            <th>경원강도</th>
+                            <th>증경강도</th>
+                            <th>종합점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="location-cell">
+                                    <span class="location-marker blue">A</span>
+                                    <span>후보지 A</span>
+                                </div>
+                            </td>
+                            <td>등급</td>
+                            <td>
+                                <div class="bar-chart"><div class="bar-fill green" style="width: 70%;"></div></div>
+                            </td>
+                            <td><span style="color: #f59e0b;">★</span> 등급</td>
+                            <td>등급</td>
+                            <td class="star-rating">★★★☆☆</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="location-cell">
+                                    <span class="location-marker blue">B</span>
+                                    <span>후보지 B</span>
+                                </div>
+                            </td>
+                            <td>증성 수준</td>
+                            <td>
+                                <div class="bar-chart"><div class="bar-fill blue" style="width: 80%;"></div></div>
+                            </td>
+                            <td>능음</td>
+                            <td>등급</td>
+                            <td class="star-rating">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="location-cell">
+                                    <span class="location-marker blue">C</span>
+                                    <span>후보지 C</span>
+                                </div>
+                            </td>
+                            <td>등급</td>
+                            <td>
+                                <div class="bar-chart"><div class="bar-fill orange" style="width: 50%;"></div></div>
+                            </td>
+                            <td><span style="color: #f59e0b;">★</span> 등급</td>
+                            <td>등급</td>
+                            <td class="star-rating">★★★☆☆</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <div class="panel-card">
+                    <div class="panel-title">상권 혁신 지표</div>
+                    <div class="stat-row">
+                        <span class="stat-label">양평군 유동인구</span>
+                        <span class="stat-value">560명 ›</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">20-40대 비중</span>
+                        <span class="stat-value">62% ›</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">평균 입대모(경쟁)</span>
+                        <span class="stat-value">25만 원 ›</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">경쟁정도 지수</span>
+                        <span class="stat-value">등급 ›</span>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <div class="warning-title">
+                            <span>⚠️</span>
+                            <span>리스로 경고</span>
+                        </div>
+                        <ul class="warning-list">
+                            <li>입대모 고다</li>
+                            <li>평행장된 실터</li>
+                            <li>매그서간 한증</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="panel-card">
+                    <div class="panel-title">추천 혁선 TOP 3</div>
+                    <ul class="recommend-list">
+                        <li>후보지 B 탄정선시</li>
+                        <li>미브사간대 정점 데이터 수거</li>
+                        <li>입대모 행한 한위 계상정</li>
+                    </ul>
+                    <button class="panel-button">이 후보치로 다음 단계 진행</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <span class="footer-link">경로 전체 보기로 들어가기 ›</span>
+        <span class="footer-link">상권 데이터 다시 불러 ›</span>
+    </div>
+</body>
+</html>

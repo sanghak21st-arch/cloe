@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뭐할까 - 경로를 탐색하고 실행 가능성을 확인하세요</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .view-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .view-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+        }
+        
+        .view-tab.active {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .filter-tab {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-box input {
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            outline: none;
+            width: 120px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr 280px;
+            gap: 20px;
+        }
+        
+        /* Left Panel - Tree Menu */
+        .tree-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .tree-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tree-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .tree-item.active {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        
+        .tree-item.parent {
+            font-weight: 600;
+        }
+        
+        .tree-item.child {
+            padding-left: 28px;
+        }
+        
+        .tree-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .tree-icon.blue {
+            background: #3b82f6;
+        }
+        
+        .tree-icon.green {
+            background: #10b981;
+        }
+        
+        .tree-icon.yellow {
+            background: #f59e0b;
+        }
+        
+        .tree-status {
+            margin-left: auto;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        
+        .tree-status.done {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .tree-status.ing {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .tree-status.wait {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        /* Center - Mind Map */
+        .mindmap-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mindmap {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .mindmap-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 24px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            margin: 0 auto 24px;
+            width: fit-content;
+        }
+        
+        .mindmap-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        
+        .mindmap-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .mindmap-level {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 24px;
+        }
+        
+        .mindmap-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .branch-node {
+            padding: 10px 16px;
+            background: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .branch-node.highlight {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        .status-indicator {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.green {
+            background: #10b981;
+        }
+        
+        .status-dot.yellow {
+            background: #f59e0b;
+        }
+        
+        .status-dot.gray {
+            background: #d1d5db;
+        }
+        
+        .connector-v {
+            width: 2px;
+            height: 20px;
+            background: #e5e7eb;
+        }
+        
+        .connector-h {
+            height: 2px;
+            background: #e5e7eb;
+            margin: 0 auto;
+        }
+        
+        /* Right Panel - Info */
+        .info-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .info-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .info-item::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #10b981;
+            border-radius: 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .info-divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 16px 0;
+        }
+        
+        .info-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .info-stat-label {
+            color: #6b7280;
+        }
+        
+        .info-stat-value {
+            color: #111827;
+            font-weight: 600;
+        }
+        
+        .info-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+        
+        .info-list li {
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-list li::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 4px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .info-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+        }
+        
+        /* Bottom CTA */
+        .bottom-cta {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 24px 40px;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+        
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 15px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            padding: 16px 40px;
+            font-size: 13px;
+            color: #6b7280;
+            background: #f9fafb;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.75);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">뭐할까</div>
+        <nav class="nav">
+            <span class="nav-item">진로탐색</span>
+            <span class="nav-item">창업탐색</span>
+            <span class="nav-item">학습루트</span>
+            <span class="nav-item">이용안내</span>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline">로그인</button>
+            <button class="btn btn-primary">시작하기 →</button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">경로를 탐색하고 실행 가능성을 확인하세요</h1>
+        <p class="page-subtitle">드리/마인드맵으로 전체 흐름을 보고, 다음 액션을 바로 확인합니다.</p>
+        
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="view-tabs">
+                <span class="view-tab">☰ 드리 보기</span>
+                <span class="view-tab active">마인드맵</span>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="filter-tabs">
+                    <span class="filter-tab">표기간 ⌄</span>
+                    <span class="filter-tab">비용 ⌄</span>
+                    <span class="filter-tab">나나드 ⌄</span>
+                </div>
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" placeholder="노드 검색">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Panel -->
+            <div class="tree-panel">
+                <div class="tree-item parent">
+                    <span>▼</span>
+                    <span>목고 설정</span>
+                </div>
+                <div class="tree-item active child">
+                    <span class="tree-icon blue"></span>
+                    <span>준비 단계</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon green"></span>
+                    <span>기초직무교육</span>
+                    <span class="tree-status done">완료</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon blue"></span>
+                    <span>직무 자격증</span>
+                    <span class="tree-status ing">진행중</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon yellow"></span>
+                    <span>실무 인턴</span>
+                    <span class="tree-status wait">예정</span>
+                </div>
+                <div class="tree-item parent">
+                    <span>▶</span>
+                    <span>실행 단계</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon green"></span>
+                    <span>비즈니스로펍 수업</span>
+                    <span class="tree-status done">완료</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon blue"></span>
+                    <span>비즈텍토렘 1기</span>
+                    <span style="margin-left: auto; color: #10b981;">+</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon green"></span>
+                    <span>사업계획서 작성</span>
+                    <span style="margin-left: auto; color: #6b7280;">−</span>
+                </div>
+                <div class="tree-item child" style="padding-left: 44px;">
+                    <span class="tree-icon yellow"></span>
+                    <span>증증 창업</span>
+                </div>
+            </div>
+            
+            <!-- Center - Mind Map -->
+            <div class="mindmap-container">
+                <div class="mindmap">
+                    <div class="mindmap-node">
+                        <span class="mindmap-icon">🎓</span>
+                        <span class="mindmap-label">졸업</span>
+                    </div>
+                    <div class="connector-v" style="margin: 0 auto;"></div>
+                    <div class="mindmap-level">
+                        <div class="mindmap-branch">
+                            <div class="branch-node highlight">
+                                <span>취업</span>
+                                <div class="status-indicator">
+                                    <span class="status-dot green"></span>
+                                    <span class="status-dot green"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mindmap-branch">
+                            <div class="branch-node">
+                                <span>카페 창업</span>
+                                <div class="status-indicator">
+                                    <span class="status-dot green"></span>
+                                    <span class="status-dot yellow"></span>
+                                    <span class="status-dot yellow"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="connector-v" style="margin: 0 auto;"></div>
+                    <div style="text-align: center;">
+                        <div class="branch-node" style="display: inline-flex;">
+                            <span>실무 인턴</span>
+                            <div class="status-indicator">
+                                <span class="status-dot green"></span>
+                                <span class="status-dot yellow"></span>
+                                <span class="status-dot gray"></span>
+                                <span class="status-dot gray"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="connector-v" style="margin: 0 auto;"></div>
+                    <div class="mindmap-level">
+                        <div class="branch-node">
+                            <span>실무 인턴</span>
+                            <div class="status-indicator">
+                                <span class="status-dot green"></span>
+                                <span class="status-dot green"></span>
+                                <span class="status-dot green"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="connector-v" style="margin: 0 auto;"></div>
+                    <div class="mindmap-level">
+                        <div class="branch-node">
+                            <span>비즈니스로펍 수업</span>
+                        </div>
+                        <div class="branch-node">
+                            <span>창업</span>
+                            <div class="status-indicator">
+                                <span class="status-dot green"></span>
+                                <span class="status-dot green"></span>
+                                <span class="status-dot yellow"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="info-panel">
+                <div class="info-title">선택 조건 요약</div>
+                <div class="info-item">취준생</div>
+                <div class="info-item">취업</div>
+                <div class="info-divider"></div>
+                <div class="info-stat">
+                    <span class="info-stat-label">추천 경로 수</span>
+                    <span class="info-stat-value">6개</span>
+                </div>
+                <div class="info-stat">
+                    <span class="info-stat-label">총 준비 기간</span>
+                    <span class="info-stat-value">약 3~12개월</span>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-title">다음 액션 TOP 3</div>
+                <ul class="info-list">
+                    <li>첫 홈티드 잇 오리엔테이션</li>
+                    <li>전략 도움책로 참아</li>
+                    <li>계획적 인턴임지 작성</li>
+                </ul>
+                <button class="info-button">다음 액션 로드 ⌄</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+        <button class="btn btn-primary btn-large">실행 계획으로 전환 →</button>
+        <button class="btn btn-outline btn-large">직접 경로 저장</button>
+    </div>
+    
+    <p class="footer-text">
+        필터 버튼을 눌러 맞춤 경로를 탐색핸보세요. 언제든지 취업/창업/학습 경로로 변경할 수 있습니다.
+    </p>
+</body>
+</html>

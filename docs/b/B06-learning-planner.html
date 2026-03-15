@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뭐할까 - 학습 루트 플래너</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 20px;
+        }
+        
+        /* Week Tabs */
+        .week-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .week-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+        }
+        
+        .week-tab.active {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        
+        /* Left Panel */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .panel-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        .priority-list {
+            list-style: none;
+        }
+        
+        .priority-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .priority-item:last-child {
+            border-bottom: none;
+        }
+        
+        .priority-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .priority-badge.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .priority-badge.medium {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .priority-badge.low {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .priority-text {
+            flex: 1;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .priority-action {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        /* Center - Calendar */
+        .calendar-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .calendar-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .calendar-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .calendar-tab {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #6b7280;
+        }
+        
+        .calendar-tab.active {
+            background: #eff6ff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .week-column {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .week-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .week-header.highlight {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            background: #fff;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .task-item.completed {
+            border-color: #10b981;
+        }
+        
+        .task-checkbox {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 2px solid #d1d5db;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .task-item.completed .task-checkbox {
+            background: #10b981;
+            border-color: #10b981;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 12px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .task-text {
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        
+        .task-time {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-left: auto;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            margin-top: 20px;
+        }
+        
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .progress-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .progress-tabs {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+        
+        .progress-tab {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #6b7280;
+        }
+        
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .progress-table th {
+            text-align: left;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .progress-table td {
+            padding: 12px 10px;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .progress-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #dbeafe;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #2563eb;
+        }
+        
+        .bar-chart {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 80px;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .bar-fill.blue {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+        
+        .bar-fill.green {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        /* Right Panel */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .gauge-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .gauge {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+        
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        
+        .gauge-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+        
+        .gauge-fill {
+            fill: none;
+            stroke: #3b82f6;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 188;
+            stroke-dashoffset: 75;
+        }
+        
+        .gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .gauge-info {
+            flex: 1;
+        }
+        
+        .gauge-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .gauge-stat {
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #3b82f6);
+            border-radius: 4px;
+            width: 60%;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+        
+        .warning-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .warning-list {
+            list-style: none;
+        }
+        
+        .warning-list li {
+            padding: 4px 0;
+            font-size: 12px;
+            color: #a16207;
+            padding-left: 12px;
+            position: relative;
+        }
+        
+        .warning-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+        }
+        
+        .recommend-list {
+            list-style: none;
+        }
+        
+        .recommend-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .recommend-list li::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 4px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .panel-cta {
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .panel-cta-secondary {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            background: #fff;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            font-size: 13px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.75);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">뭐할까</div>
+        <nav class="nav">
+            <span class="nav-item">진로탐색</span>
+            <span class="nav-item">창업탐색</span>
+            <span class="nav-item">학습루트</span>
+            <span class="nav-item">이용안내</span>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline">로그인</button>
+            <button class="btn btn-primary">시작하기 →</button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">학습 루트 플래너</h1>
+        <p class="page-subtitle">목표 시험과 현재 수준을 기반으로 3·6·12주 계획을 자동 설계합니다.</p>
+        
+        <div class="week-tabs">
+            <span class="week-tab">3주</span>
+            <span class="week-tab active">6주</span>
+            <span class="week-tab">6주</span>
+            <span class="week-tab">12주</span>
+        </div>
+        
+        <div class="content-grid">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="panel-card">
+                    <div class="panel-title">과목/단원 우선순위</div>
+                    <ul class="priority-list">
+                        <li class="priority-item">
+                            <span class="priority-badge high">상급</span>
+                            <span class="priority-text">핵물자증제 추출 계산안되</span>
+                            <span class="priority-action">접근</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge medium">첨정</span>
+                            <span class="priority-text">미적분: 좌각토형 조배</span>
+                            <span class="priority-action">토론</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge medium">하급</span>
+                            <span class="priority-text">핵물자증제: 장애수선 태봅</span>
+                            <span class="priority-action">상응</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge low">낮음</span>
+                            <span class="priority-text">기억: 정간토형 취안</span>
+                            <span class="priority-action">낮음</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge low">낮음</span>
+                            <span class="priority-text">수학띠: 수업 개념 확인</span>
+                            <span class="priority-action">낮음</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="panel-card">
+                    <div class="panel-title">철목 변형</div>
+                    <ul class="priority-list">
+                        <li class="priority-item">
+                            <span class="priority-badge high">상급</span>
+                            <span class="priority-text">철행개념 요점</span>
+                            <span class="priority-action">봉음</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge high">상급</span>
+                            <span class="priority-text">고력앱 요점</span>
+                            <span class="priority-action">동간</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge medium">중급</span>
+                            <span class="priority-text">학력 만원</span>
+                            <span class="priority-action">봉음</span>
+                        </li>
+                        <li class="priority-item">
+                            <span class="priority-badge low">하급</span>
+                            <span class="priority-text">천띠 만원</span>
+                            <span class="priority-action">봉음</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Center - Calendar -->
+            <div class="calendar-panel">
+                <div class="calendar-header">
+                    <div class="calendar-title">주차별 개혁</div>
+                    <div class="calendar-tabs">
+                        <span class="calendar-tab active">교기형</span>
+                        <span class="calendar-tab">주유현</span>
+                    </div>
+                </div>
+                
+                <div class="week-grid">
+                    <div class="week-column">
+                        <div class="week-header">Week 1</div>
+                        <div class="task-item completed">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">핵물자증제</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">전략 검열</span>
+                            <span class="task-time">6h</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">오정수도 정리</span>
+                            <span class="task-time">4h</span>
+                        </div>
+                    </div>
+                    <div class="week-column">
+                        <div class="week-header highlight">Week 2</div>
+                        <div class="task-item completed">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">응용 남변</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">핵물의스캔러 적응평거</span>
+                            <span class="task-time">4h</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">팀안 딩점력해고 반포</span>
+                            <span class="task-time">4h</span>
+                        </div>
+                    </div>
+                    <div class="week-column">
+                        <div class="week-header">Week 3</div>
+                        <div class="task-item completed">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">오안 공안</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">퀵족 당1월료저채</span>
+                            <span class="task-time">5h</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">모엠 고고력 적형</span>
+                            <span class="task-time">6h</span>
+                        </div>
+                    </div>
+                    <div class="week-column">
+                        <div class="week-header">Week 4</div>
+                        <div class="task-item completed">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">중간 삼원</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">쾌의스캔형 추첨</span>
+                            <span class="task-time">4h</span>
+                        </div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">미아열 오의 접업</span>
+                            <span class="task-time">3h</span>
+                        </div>
+                    </div>
+                    <div class="week-column">
+                        <div class="week-header">Week 5</div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">팀요 고력</span>
+                        </div>
+                    </div>
+                    <div class="week-column">
+                        <div class="week-header">Week 6</div>
+                        <div class="task-item">
+                            <span class="task-checkbox"></span>
+                            <span class="task-text">미아열 고력</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-title">전형률</div>
+                        <div class="progress-tabs">
+                            <span class="progress-tab">독서</span>
+                            <span class="progress-tab">구원철</span>
+                            <span class="progress-tab">광포</span>
+                        </div>
+                    </div>
+                    <table class="progress-table">
+                        <thead>
+                            <tr>
+                                <th>위점 쥬저</th>
+                                <th>월</th>
+                                <th>7월</th>
+                                <th>8월</th>
+                                <th>9월</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="progress-badge">순위 학호 감염</span></td>
+                                <td><div class="bar-chart"><div class="bar-fill blue" style="width: 70%;"></div></div></td>
+                                <td><span style="color: #2563eb; font-weight: 600;">제곱7</span></td>
+                                <td class="star-rating">★★★★☆</td>
+                                <td>8,000원엽</td>
+                            </tr>
+                            <tr>
+                                <td><span class="progress-badge">순위 증간 감염</span></td>
+                                <td><div class="bar-chart"><div class="bar-fill blue" style="width: 60%;"></div></div></td>
+                                <td><span style="color: #2563eb; font-weight: 600;">85%7</span></td>
+                                <td class="star-rating">★★★☆☆</td>
+                                <td>3,000원엽</td>
+                            </tr>
+                            <tr>
+                                <td><span class="progress-badge">순위 고력천 졸업</span></td>
+                                <td><div class="bar-chart"><div class="bar-fill blue" style="width: 50%;"></div></div></td>
+                                <td><span style="color: #2563eb; font-weight: 600;">6.5%7</span></td>
+                                <td class="star-rating">★★☆☆☆</td>
+                                <td>2,000원엽</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <div class="panel-card">
+                    <div class="panel-title">진행 현 경고</div>
+                    <div class="gauge-container">
+                        <div class="gauge">
+                            <svg class="gauge-svg" viewBox="0 0 80 80">
+                                <circle class="gauge-bg" cx="40" cy="40" r="30"/>
+                                <circle class="gauge-fill" cx="40" cy="40" r="30"/>
+                            </svg>
+                            <div class="gauge-value">60%</div>
+                        </div>
+                        <div class="gauge-info">
+                            <div class="gauge-label">연필률</div>
+                            <div class="gauge-stat">리뷰미안수건 53시간</div>
+                        </div>
+                    </div>
+                    <div class="panel-title" style="margin-top: 20px;">예상 정수 토포륙</div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill"></div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <div class="warning-title">
+                            <span>⚠️</span>
+                            <span>경고</span>
+                        </div>
+                        <ul class="warning-list">
+                            <li>선행개념 미정토</li>
+                            <li>폭장 비응 묵을</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="panel-card">
+                    <div class="panel-title">추천 애선 TOP 3</div>
+                    <ul class="recommend-list">
+                        <li>해기한1로 2언 협약</li>
+                        <li>중간 오연 번역 독강</li>
+                        <li>잇팀나드 추선 확증</li>
+                    </ul>
+                    <button class="panel-cta">추간 개혁 지정</button>
+                    <button class="panel-cta-secondary">선행 리마인드 설정 ›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <span class="footer-link">경로 전체 보기로 들어가기 ›</span>
+    </div>
+</body>
+</html>

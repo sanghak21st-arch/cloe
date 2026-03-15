@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뭐할까 - 어떤 목표를 준비 중인가요?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 24px 40px;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        
+        .progress-step.active {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        .progress-step.inactive {
+            background: #e5e7eb;
+            color: #9ca3af;
+        }
+        
+        .progress-line {
+            width: 40px;
+            height: 2px;
+            background: #e5e7eb;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 24px;
+            padding: 0 40px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+            grid-column: 1 / -1;
+        }
+        
+        .page-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 24px;
+            grid-column: 1 / -1;
+        }
+        
+        /* Left Panel - Filters */
+        .filter-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .filter-section {
+            margin-bottom: 24px;
+        }
+        
+        .filter-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .filter-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+        }
+        
+        .filter-chip.active {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        
+        .filter-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-top: 12px;
+        }
+        
+        .filter-search input {
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            outline: none;
+            flex: 1;
+        }
+        
+        /* Center - Route Cards */
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .route-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .route-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .route-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+        
+        .route-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .route-icon.blue {
+            background: #dbeafe;
+        }
+        
+        .route-icon.green {
+            background: #d1fae5;
+        }
+        
+        .route-icon.purple {
+            background: #ede9fe;
+        }
+        
+        .route-icon.orange {
+            background: #fef3c7;
+        }
+        
+        .route-icon.teal {
+            background: #ccfbf1;
+        }
+        
+        .route-icon.red {
+            background: #fee2e2;
+        }
+        
+        .route-content {
+            flex: 1;
+        }
+        
+        .route-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .route-info {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .route-info span {
+            color: #111827;
+            font-weight: 500;
+        }
+        
+        .route-stars {
+            color: #fbbf24;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .route-arrow {
+            color: #9ca3af;
+            font-size: 20px;
+        }
+        
+        /* Right Panel - Summary */
+        .summary-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .summary-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .summary-item::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #10b981;
+            border-radius: 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .summary-divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 16px 0;
+        }
+        
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .summary-stat-label {
+            color: #6b7280;
+        }
+        
+        .summary-stat-value {
+            color: #111827;
+            font-weight: 600;
+        }
+        
+        .summary-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-full {
+            width: 100%;
+            padding: 12px;
+        }
+        
+        /* Bottom CTA */
+        .bottom-cta {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 24px 40px;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 15px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            padding: 16px 40px;
+            font-size: 13px;
+            color: #6b7280;
+            background: #f9fafb;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.75);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">뭐할까</div>
+        <nav class="nav">
+            <span class="nav-item">진로탐색</span>
+            <span class="nav-item">창업탐색</span>
+            <span class="nav-item">학습루트</span>
+            <span class="nav-item">이용안내</span>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline">로그인</button>
+            <button class="btn btn-primary">시작하기 →</button>
+        </div>
+    </header>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-step active">1 기본 선택</div>
+        <div class="progress-line"></div>
+        <div class="progress-step inactive">2 목표 설정</div>
+        <div class="progress-line"></div>
+        <div class="progress-step inactive">3 경로 추천</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div style="padding: 0 40px;">
+        <h1 class="page-title">어떤 목표를 준비 중인가요?</h1>
+        <p class="page-subtitle">연령·유형·관심분야를 선택하면 맞춤 경로를 추천합니다.</p>
+    </div>
+    
+    <div class="main-content">
+        <!-- Left Panel -->
+        <div class="filter-panel">
+            <div class="filter-section">
+                <div class="filter-title">
+                    연령
+                    <span style="color: #9ca3af;">ⓘ</span>
+                </div>
+                <div class="filter-options">
+                    <span class="filter-chip">중고생</span>
+                    <span class="filter-chip">대학</span>
+                    <span class="filter-chip active">취준생</span>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">
+                    유형
+                    <span style="color: #9ca3af;">ⓘ</span>
+                </div>
+                <div class="filter-options">
+                    <span class="filter-chip active">취업</span>
+                    <span class="filter-chip">창업</span>
+                    <span class="filter-chip">학습</span>
+                </div>
+                <div class="filter-search">
+                    <span>🔍</span>
+                    <input type="text" placeholder="분야 검색">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Center Content -->
+        <div class="center-content">
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="예: 세무직 공무원, 카페 창업, 전략 1급">
+                <span style="color: #9ca3af;">⌄</span>
+            </div>
+            
+            <div class="section-header">
+                <span class="section-title">경로별 단가·연뷰</span>
+            </div>
+            
+            <div class="route-grid">
+                <div class="route-card">
+                    <div class="route-icon blue">🏢</div>
+                    <div class="route-content">
+                        <div class="route-name">세무직 공무원 준비 루트</div>
+                        <div class="route-info">예상 기간 <span>8개월</span></div>
+                        <div class="route-info">비용 토크 <span>80만원</span></div>
+                        <div class="route-stars">★★★★☆</div>
+                    </div>
+                    <span class="route-arrow">›</span>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-icon green">👮</div>
+                    <div class="route-content">
+                        <div class="route-name">경찰 공채 준비 루트</div>
+                        <div class="route-info">예상 기간 <span>8~12개</span></div>
+                        <div class="route-info">비용 토크 <span>70만원</span></div>
+                        <div class="route-stars">★★★★☆</div>
+                    </div>
+                    <span class="route-arrow">›</span>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-icon purple">📱</div>
+                    <div class="route-content">
+                        <div class="route-name">스마트스토어 창업 루트</div>
+                        <div class="route-info">예상 기간 <span>4개월</span></div>
+                        <div class="route-info">비용 토크 <span>250만원</span></div>
+                        <div class="route-stars">★★★★☆</div>
+                    </div>
+                    <span class="route-arrow">›</span>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-icon orange">📊</div>
+                    <div class="route-content">
+                        <div class="route-name">수능 수학 집중 루트</div>
+                        <div class="route-info">예상 기간 <span>2개월</span></div>
+                        <div class="route-info">비용 토크 <span>50만원</span></div>
+                        <div class="route-stars">★★★☆☆</div>
+                    </div>
+                    <span class="route-arrow">›</span>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-icon teal">💻</div>
+                    <div class="route-content">
+                        <div class="route-name">컴활 1급 합격 루트</div>
+                        <div class="route-info">예상 기간 <span>3개월</span></div>
+                        <div class="route-info">비용 토크 <span>30만원</span></div>
+                        <div class="route-stars">★★★☆☆</div>
+                    </div>
+                    <span class="route-arrow">›</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel -->
+        <div class="summary-panel">
+            <div class="summary-title">선택 조건 요약</div>
+            <div class="summary-item">취준생</div>
+            <div class="summary-item">취업</div>
+            <div class="summary-divider"></div>
+            <div class="summary-stat">
+                <span class="summary-stat-label">추천 경로 수</span>
+                <span class="summary-stat-value">6개</span>
+            </div>
+            <div class="summary-stat">
+                <span class="summary-stat-label">총 준비 기간</span>
+                <span class="summary-stat-value">약 3~12개월</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-title">선택 조건 요약</div>
+            <div class="summary-item">취준생</div>
+            <div class="summary-item">취업</div>
+            <div class="summary-divider"></div>
+            <div class="summary-stat">
+                <span class="summary-stat-label">추천 경로 수</span>
+                <span class="summary-stat-value">6개</span>
+            </div>
+            <div class="summary-stat">
+                <span class="summary-stat-label">총 준비 기간</span>
+                <span class="summary-stat-value">약 3~12개월</span>
+            </div>
+            <div class="summary-buttons">
+                <button class="btn btn-primary btn-full">추천 경로 확인하기</button>
+                <button class="btn btn-outline btn-full">직접 키워드로 탐색</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+        <button class="btn btn-primary btn-large">추천 경로 확인하기 →</button>
+        <button class="btn btn-outline btn-large">직접 키워드로 탐색</button>
+    </div>
+    
+    <p class="footer-text">
+        필터 버튼을 눌러 맞춤 경로를 탐색핸보세요. 언제든지 취업/창업/학습 경로로 변경할 수 있습니다.
+    </p>
+</body>
+</html>

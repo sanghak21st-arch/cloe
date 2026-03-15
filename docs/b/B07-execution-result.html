@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뭐할까 - 실행 플랜 결과</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
+        
+        /* Summary Bar */
+        .summary-bar {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 16px 20px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .summary-icon {
+            width: 36px;
+            height: 36px;
+            background: #dbeafe;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .summary-text {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .summary-value.highlight {
+            color: #2563eb;
+        }
+        
+        /* Left Panel */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .panel-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        /* Top Actions */
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .action-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: #dbeafe;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2563eb;
+        }
+        
+        .action-badge.green {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .action-list {
+            list-style: none;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .action-item:last-child {
+            border-bottom: none;
+        }
+        
+        .action-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid #d1d5db;
+            flex-shrink: 0;
+        }
+        
+        .action-item.completed .action-checkbox {
+            background: #10b981;
+            border-color: #10b981;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 14px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .action-text {
+            flex: 1;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        /* Checklist Section */
+        .checklist-section {
+            margin-top: 16px;
+        }
+        
+        .checklist-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+        
+        /* Document List */
+        .doc-list {
+            list-style: none;
+        }
+        
+        .doc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .doc-item:last-child {
+            border-bottom: none;
+        }
+        
+        .doc-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .doc-icon {
+            width: 32px;
+            height: 32px;
+            background: #fee2e2;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .doc-name {
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .doc-status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .doc-status.ready {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .doc-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .timeline-week {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .timeline-track {
+            position: relative;
+            padding-left: 24px;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 16px 0;
+            padding-left: 20px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -20px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+        }
+        
+        .timeline-item.active .timeline-dot {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+        
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-task {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-task-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #374151;
+        }
+        
+        .timeline-task-status {
+            padding: 4px 10px;
+            background: #dbeafe;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #2563eb;
+        }
+        
+        .timeline-task-status.completed {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .warning-icon {
+            font-size: 16px;
+        }
+        
+        .warning-text {
+            font-size: 12px;
+            color: #a16207;
+            line-height: 1.5;
+        }
+        
+        /* Right Panel */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .guide-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .guide-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #fef3c7;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #d97706;
+            margin-bottom: 10px;
+        }
+        
+        .guide-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .guide-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .guide-image {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .guide-button {
+            width: 100%;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #374151;
+            cursor: pointer;
+        }
+        
+        .panel-link {
+            display: block;
+            padding: 12px 0;
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        
+        /* Bottom Actions */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 0;
+        }
+        
+        .btn-action {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-action.primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        .btn-action.secondary {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .btn-action.ghost {
+            background: transparent;
+            color: #6b7280;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.75);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">뭐할까</div>
+        <nav class="nav">
+            <span class="nav-item">진로탐색</span>
+            <span class="nav-item">창업탐색</span>
+            <span class="nav-item">학습루트</span>
+            <span class="nav-item">이용안내</span>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline">로그인</button>
+            <button class="btn btn-primary">시작하기 →</button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">실행 플랜 결과</h1>
+        <p class="page-subtitle">탐색 결과를 실행 가능한 주간 액션으로 전환했습니다.</p>
+        
+        <!-- Summary Bar -->
+        <div class="summary-bar">
+            <div class="summary-item">
+                <div class="summary-icon">📋</div>
+                <div>
+                    <div class="summary-text">카테 창업 루트</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <span class="summary-text">📅 예상 총비기간</span>
+                <span class="summary-value highlight">10주</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">1,230</span>
+                <span class="summary-text">만원</span>
+                <span style="color: #9ca3af;">›</span>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Top Actions -->
+                <div class="panel-card">
+                    <div class="panel-title">이번 주 액션 TOP 3</div>
+                    <div class="top-actions">
+                        <span class="action-badge">📍 후보지</span>
+                    </div>
+                    <ul class="action-list">
+                        <li class="action-item completed">
+                            <span class="action-checkbox"></span>
+                            <span class="action-text">후보지 B 인허가 증건 작성</span>
+                        </li>
+                        <li class="action-item completed">
+                            <span class="action-checkbox"></span>
+                            <span class="action-text">경쟁업도 A/B/C 배출 협상</span>
+                        </li>
+                        <li class="action-item completed">
+                            <span class="action-checkbox"></span>
+                            <span class="action-text">간이사업계획서 주제확</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="checklist-section">
+                        <div class="checklist-title">리스너 마련 체토버스트</div>
+                        <div class="checklist-item">
+                            <span class="action-checkbox"></span>
+                            <span class="action-text">조기사인내 대배 배움 넣어 들헌</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="action-checkbox"></span>
+                            <span class="action-text">조정애 대배 행용선 물련</span>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-section">
+                        <div class="checklist-title">증빙/준비 자료 목록</div>
+                        <ul class="doc-list">
+                            <li class="doc-item">
+                                <div class="doc-left">
+                                    <span class="doc-icon">📄</span>
+                                    <span class="doc-name">매출정명서 JPG</span>
+                                </div>
+                                <span class="doc-status ready">뒤흔듦</span>
+                            </li>
+                            <li class="doc-item">
+                                <div class="doc-left">
+                                    <span class="doc-icon">📄</span>
+                                    <span class="doc-name">간이사업계획서 HWP</span>
+                                </div>
+                                <span class="doc-status pending">취업톨</span>
+                            </li>
+                            <li class="doc-item">
+                                <div class="doc-left">
+                                    <span class="doc-icon">📄</span>
+                                    <span class="doc-name">창업 양식 노구 계절이기</span>
+                                </div>
+                                <span class="doc-status ready">윤호정</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="panel-card">
+                    <div class="panel-title">이번 달 마일스톤</div>
+                    <div class="timeline-header">
+                        <span class="timeline-week">Week 1</span>
+                        <span class="timeline-week">Week 4</span>
+                        <span class="timeline-week">Week 8</span>
+                        <span class="timeline-week">Week 10</span>
+                    </div>
+                    <div class="timeline-container">
+                        <div class="timeline-track">
+                            <div class="timeline-line"></div>
+                            
+                            <div class="timeline-item active">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">Week 1 등억 설령</div>
+                                <div class="timeline-task">
+                                    <span class="timeline-task-text">📧 풍의 남행</span>
+                                    <span class="timeline-task-status completed">✓ 적방기</span>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">Week 4 증간 협업</div>
+                                <div class="timeline-task">
+                                    <span class="timeline-task-text">📋 간음 먹로 준혁</span>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">Week 8 미아설 원행 및 인조 졸례</div>
+                                <div class="timeline-task">
+                                    <span class="timeline-task-text">💬 간락촉로답을 한등 행경로 확혈형</span>
+                                    <span class="timeline-task-status completed">✓ 바트기</span>
+                                </div>
+                                <div class="timeline-task">
+                                    <span class="timeline-task-text">📋 쟁앙방로 청먹양세 한습됨</span>
+                                    <span class="timeline-task-status completed">✓ 바트기</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <span class="warning-icon">⚠️</span>
+                        <span class="warning-text">
+                            당 계획은 임의한 가정연출 기반으로 명심적였습니다. 성제 결과는 실행 및 시험 상황이 혁여 달라질 수 있습니다.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <div class="guide-card">
+                    <div class="panel-title">추천 리스로 & 가이드</div>
+                    
+                    <div class="guide-badge">스포너드</div>
+                    <div class="guide-title">창안 적할토 온라인 강의</div>
+                    <div class="guide-text">스어 임 암저 전정 가이드</div>
+                    <div class="guide-image"></div>
+                    <button class="guide-button">바로가기</button>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="guide-badge">스포너드</div>
+                    <div class="guide-title">입과 계약조건 섬작반</div>
+                    <div class="guide-text">괴환가 계획서 검토 세매스</div>
+                    <div class="guide-image"></div>
+                    <button class="guide-button">바로가기</button>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="panel-title">정적 가이드</div>
+                    <a href="#" class="panel-link">압제선응약 초기지느박 매면 가이드 ›</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Actions -->
+        <div class="bottom-actions">
+            <button class="btn-action ghost">공유하기</button>
+            <button class="btn-action secondary">📄 PDF 나이스키</button>
+            <button class="btn-action primary">📋 계획 지정</button>
+        </div>
+    </div>
+</body>
+</html>
