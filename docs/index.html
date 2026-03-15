@@ -35,6 +35,20 @@
 @media (max-width:768px){.demo-nav-zone{width:24vw;}}
 </style>
 
+
+<style id="demo-nav-style-force">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:2147483000;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:2147483001;bottom:14px;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-nav-ctrl{position:fixed;z-index:2147483002;top:12px;right:12px;display:flex;gap:8px;}
+.demo-nav-btn{background:#111827;color:#fff;border:1px solid #374151;padding:8px 10px;border-radius:10px;font:12px/1 sans-serif;cursor:pointer;}
+.demo-page-chip{position:fixed;z-index:2147483002;top:12px;left:12px;background:#111827;color:#fff;padding:8px 10px;border-radius:10px;font:12px/1 sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
 </head>
 <body>
   <div class="wrap">
@@ -59,8 +73,47 @@
     </div>
   </div>
 
-<!-- B_DEMO_LINK -->
-<a href="./b/" style="position:fixed;top:12px;left:12px;z-index:10001;background:#0f172a;color:#fff;padding:8px 12px;border-radius:10px;font:12px/1 'Noto Sans KR',sans-serif;text-decoration:none;opacity:.9;">Service B Demo</a>
+
+
+<div class="demo-nav-zone left" data-target="01-hero.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="04-remediation.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">1/5</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('01-hero.html'));
+  if(R) R.addEventListener('click',()=>go('04-remediation.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('01-hero.html'); if(e.key==='ArrowRight')go('04-remediation.html');});
+})();
+</script>
+
+
+<div class="demo-nav-zone left" data-target="01-hero.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="04-remediation.html" title="다음"></div>
+<div class="demo-page-chip">1/5</div>
+<div class="demo-nav-ctrl">
+  <button class="demo-nav-btn" id="demoPrevBtn">◀ 이전</button>
+  <button class="demo-nav-btn" id="demoNextBtn">다음 ▶</button>
+</div>
+<div class="demo-nav-hint left">왼쪽 클릭: 이전</div>
+<div class="demo-nav-hint right">오른쪽 클릭: 다음</div>
+<script id="demo-nav-script-force">
+(()=>{
+ const go=(u)=>{ try{ window.location.assign(u); }catch(e){ window.location.href=u; } };
+ const prev='01-hero.html', next='04-remediation.html';
+ const L=document.querySelector('.demo-nav-zone.left');
+ const R=document.querySelector('.demo-nav-zone.right');
+ if(L) L.onclick=()=>go(prev);
+ if(R) R.onclick=()=>go(next);
+ const pb=document.getElementById('demoPrevBtn'); if(pb) pb.onclick=()=>go(prev);
+ const nb=document.getElementById('demoNextBtn'); if(nb) nb.onclick=()=>go(next);
+ window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowLeft') go(prev); if(e.key==='ArrowRight') go(next); });
+})();
+</script>
 
 </body>
 </html>
