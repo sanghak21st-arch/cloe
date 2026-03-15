@@ -457,9 +457,6 @@
 .demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
 .demo-nav-zone.left{left:0;}
 .demo-nav-zone.right{right:0;}
-.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.72);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
-.demo-nav-hint.left{left:16px;}
-.demo-nav-hint.right{right:16px;}
 .demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
 @media (max-width:768px){.demo-nav-zone{width:24vw;}}
 </style>
@@ -469,9 +466,6 @@
 .demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:2147483000;cursor:pointer;}
 .demo-nav-zone.left{left:0;}
 .demo-nav-zone.right{right:0;}
-.demo-nav-hint{position:fixed;z-index:2147483001;bottom:14px;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 sans-serif;}
-.demo-nav-hint.left{left:16px;}
-.demo-nav-hint.right{right:16px;}
 .demo-page-chip{position:fixed;z-index:2147483002;top:12px;left:12px;background:#111827;color:#fff;padding:8px 10px;border-radius:10px;font:12px/1 sans-serif;}
 @media (max-width:768px){.demo-nav-zone{width:24vw;}}
 </style>
@@ -696,8 +690,6 @@
 
 <div class="demo-nav-zone left" data-target="05-persona.html" title="이전"></div>
 <div class="demo-nav-zone right" data-target="07-conversion.html" title="다음"></div>
-<div class="demo-nav-hint left">◀ 이전</div>
-<div class="demo-nav-hint right">다음 ▶</div>
 <div class="demo-page-chip">4/5</div>
 <script id="demo-nav-script">
 (()=>{
@@ -714,8 +706,6 @@
 <div class="demo-nav-zone left" data-target="05-persona.html" title="이전"></div>
 <div class="demo-nav-zone right" data-target="07-conversion.html" title="다음"></div>
 <div class="demo-page-chip">4/5</div>
-<div class="demo-nav-hint left">왼쪽 클릭: 이전</div>
-<div class="demo-nav-hint right">오른쪽 클릭: 다음</div>
 <script id="demo-nav-script-force">
 (()=>{
  const go=(u)=>{ try{ window.location.assign(u); }catch(e){ window.location.href=u; } };
