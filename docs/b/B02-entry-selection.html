@@ -601,5 +601,22 @@
     <p class="footer-text">
         필터 버튼을 눌러 맞춤 경로를 탐색핸보세요. 언제든지 취업/창업/학습 경로로 변경할 수 있습니다.
     </p>
+
+<div class="demo-nav-zone left" data-target="B01-hero.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="B03-route-explorer.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">2/7</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('B01-hero.html'));
+  if(R) R.addEventListener('click',()=>go('B03-route-explorer.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('B01-hero.html'); if(e.key==='ArrowRight')go('B03-route-explorer.html');});
+})();
+</script>
+
 </body>
 </html>

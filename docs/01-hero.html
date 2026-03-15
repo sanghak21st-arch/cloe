@@ -59,16 +59,20 @@
     </div>
   </div>
 
+
+
 <div class="demo-nav-zone left" data-target="01-hero.html" title="이전"></div>
 <div class="demo-nav-zone right" data-target="04-remediation.html" title="다음"></div>
 <div class="demo-nav-hint left">◀ 이전</div>
 <div class="demo-nav-hint right">다음 ▶</div>
-<div class="demo-page-chip">1/5 · A01 Hero</div>
-<script>
+<div class="demo-page-chip">1/5</div>
+<script id="demo-nav-script">
 (()=>{
   const go=(u)=>window.location.href=u;
-  document.querySelector('.demo-nav-zone.left').addEventListener('click',()=>go('01-hero.html'));
-  document.querySelector('.demo-nav-zone.right').addEventListener('click',()=>go('04-remediation.html'));
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('01-hero.html'));
+  if(R) R.addEventListener('click',()=>go('04-remediation.html'));
   window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('01-hero.html'); if(e.key==='ArrowRight')go('04-remediation.html');});
 })();
 </script>

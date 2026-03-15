@@ -876,5 +876,22 @@
     <div class="footer">
         <span class="footer-link">경로 전체 보기로 들어가기 ›</span>
     </div>
+
+<div class="demo-nav-zone left" data-target="B05-startup-simulator.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="B07-execution-result.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">6/7</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('B05-startup-simulator.html'));
+  if(R) R.addEventListener('click',()=>go('B07-execution-result.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('B05-startup-simulator.html'); if(e.key==='ArrowRight')go('B07-execution-result.html');});
+})();
+</script>
+
 </body>
 </html>

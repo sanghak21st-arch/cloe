@@ -965,16 +965,20 @@
         </div>
     </div>
 
+
+
 <div class="demo-nav-zone left" data-target="06-tier.html" title="이전"></div>
 <div class="demo-nav-zone right" data-target="07-conversion.html" title="다음"></div>
 <div class="demo-nav-hint left">◀ 이전</div>
 <div class="demo-nav-hint right">다음 ▶</div>
-<div class="demo-page-chip">5/5 · A07 전환 페이지</div>
-<script>
+<div class="demo-page-chip">5/5</div>
+<script id="demo-nav-script">
 (()=>{
   const go=(u)=>window.location.href=u;
-  document.querySelector('.demo-nav-zone.left').addEventListener('click',()=>go('06-tier.html'));
-  document.querySelector('.demo-nav-zone.right').addEventListener('click',()=>go('07-conversion.html'));
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('06-tier.html'));
+  if(R) R.addEventListener('click',()=>go('07-conversion.html'));
   window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('06-tier.html'); if(e.key==='ArrowRight')go('07-conversion.html');});
 })();
 </script>

@@ -729,5 +729,22 @@
         <span class="footer-link">경로 전체 보기로 들어가기 ›</span>
         <span class="footer-link">상권 데이터 다시 불러 ›</span>
     </div>
+
+<div class="demo-nav-zone left" data-target="B03-route-explorer.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="B05-startup-simulator.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">4/7</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('B03-route-explorer.html'));
+  if(R) R.addEventListener('click',()=>go('B05-startup-simulator.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('B03-route-explorer.html'); if(e.key==='ArrowRight')go('B05-startup-simulator.html');});
+})();
+</script>
+
 </body>
 </html>

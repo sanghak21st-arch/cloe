@@ -643,5 +643,22 @@
     <p class="legal-text" style="padding: 12px 40px; background: #f9fafb;">
         무조건 선정 보장을 제공하지 않으며, 문서 완성도 및 제출 준비 품질 향상 중심의 서비스입니다.
     </p>
+
+<div class="demo-nav-zone left" data-target="B01-hero.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="B02-entry-selection.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">1/7</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('B01-hero.html'));
+  if(R) R.addEventListener('click',()=>go('B02-entry-selection.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('B01-hero.html'); if(e.key==='ArrowRight')go('B02-entry-selection.html');});
+})();
+</script>
+
 </body>
 </html>

@@ -717,5 +717,22 @@
             <button class="btn-action primary">📋 계획 지정</button>
         </div>
     </div>
+
+<div class="demo-nav-zone left" data-target="B06-learning-planner.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="B07-execution-result.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">7/7</div>
+<script id="demo-nav-script">
+(()=>{
+  const go=(u)=>window.location.href=u;
+  const L=document.querySelector('.demo-nav-zone.left');
+  const R=document.querySelector('.demo-nav-zone.right');
+  if(L) L.addEventListener('click',()=>go('B06-learning-planner.html'));
+  if(R) R.addEventListener('click',()=>go('B07-execution-result.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('B06-learning-planner.html'); if(e.key==='ArrowRight')go('B07-execution-result.html');});
+})();
+</script>
+
 </body>
 </html>
