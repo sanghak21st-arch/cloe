@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A01 Hero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Noto Sans KR',sans-serif;background:#f5f7fa;color:#111827;min-height:100vh}
+    .wrap{max-width:1200px;margin:0 auto;padding:80px 32px}
+    .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center}
+    .badge{display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+    h1{font-size:48px;line-height:1.2;letter-spacing:-.4px;margin-bottom:14px}
+    p.sub{font-size:18px;color:#4b5563;line-height:1.6;margin-bottom:22px}
+    .btns{display:flex;gap:10px;margin-bottom:12px}
+    .btn{padding:12px 18px;border-radius:10px;border:1px solid #d1d5db;background:#fff;font-weight:600}
+    .btn.primary{background:#2563eb;border-color:#2563eb;color:#fff}
+    .note{font-size:13px;color:#6b7280}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 6px 20px rgba(17,24,39,.06);overflow:hidden}
+    .card img{width:100%;display:block}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;padding:12px}
+    .pill{padding:6px 10px;border-radius:999px;background:#f3f4f6;font-size:12px;font-weight:600}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}h1{font-size:36px}}
+  </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.72);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section>
+        <span class="badge">B2B 사전진단 서비스</span>
+        <h1>작성 전에,<br>탈락요인을 진단합니다</h1>
+        <p class="sub">공고별 하한선·가점·리스크를 사전 진단해 제출 가능성을 높입니다.</p>
+        <div class="btns">
+          <button class="btn primary">사전진단 시작</button>
+          <button class="btn">데모 보기</button>
+        </div>
+        <p class="note">신청 2분 · 카드 결제 없음</p>
+      </section>
+      <aside class="card">
+        <img src="assets/dashboard-preview.jpg" alt="dashboard">
+        <div class="pillrow">
+          <span class="pill">하드게이트 통과</span>
+          <span class="pill">고용·노무 보완 필요</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

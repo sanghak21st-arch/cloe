@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보완 리포트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 8px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .sidebar-item.active {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        .sidebar-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 1200px;
+        }
+        
+        .page-header {
+            margin-bottom: 32px;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+        }
+        
+        /* Cards */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+        
+        /* Score Section */
+        .score-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .score-display {
+            display: flex;
+            align-items: baseline;
+        }
+        
+        .score-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2563eb;
+            line-height: 1;
+        }
+        
+        .score-unit {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2563eb;
+            margin-left: 4px;
+        }
+        
+        /* Gauge Chart */
+        .gauge-container {
+            position: relative;
+            width: 140px;
+            height: 80px;
+        }
+        
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .gauge-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+        
+        .gauge-fill {
+            fill: none;
+            stroke: url(#gaugeGradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 188;
+            stroke-dashoffset: 45;
+            transform: rotate(-90deg);
+            transform-origin: 70px 70px;
+        }
+        
+        .gauge-needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 55px;
+            background: #374151;
+            border-radius: 2px;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(25deg);
+        }
+        
+        .gauge-center {
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: #374151;
+            border-radius: 50%;
+        }
+        
+        .gauge-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+        
+        /* Issues List */
+        .issues-list {
+            margin-bottom: 24px;
+        }
+        
+        .issue-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .issue-item:last-child {
+            border-bottom: none;
+        }
+        
+        .issue-icon {
+            width: 20px;
+            height: 20px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .issue-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: #fff;
+        }
+        
+        .issue-text {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        /* Conditions List */
+        .conditions-list {
+            margin-top: 16px;
+        }
+        
+        .condition-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px 0;
+        }
+        
+        .condition-icon {
+            width: 18px;
+            height: 18px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        
+        .condition-icon svg {
+            width: 10px;
+            height: 10px;
+            fill: #fff;
+        }
+        
+        .condition-text {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        
+        /* Right Column - Priority List */
+        .priority-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+            height: fit-content;
+        }
+        
+        .priority-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+        
+        .priority-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #f3f4f6;
+        }
+        
+        .priority-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .priority-number {
+            width: 28px;
+            height: 28px;
+            background: #2563eb;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .priority-content {
+            flex: 1;
+        }
+        
+        .priority-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        
+        .priority-item-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn-secondary {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+        
+        /* SVG Gradient */
+        .svg-defs {
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+    </style>
+
+<style id="demo-nav-style">
+.demo-nav-zone{position:fixed;top:0;bottom:0;width:20vw;z-index:9999;cursor:pointer;}
+.demo-nav-zone.left{left:0;}
+.demo-nav-zone.right{right:0;}
+.demo-nav-hint{position:fixed;z-index:10000;bottom:14px;background:rgba(17,24,39,.72);color:#fff;padding:8px 12px;border-radius:999px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+.demo-nav-hint.left{left:16px;}
+.demo-nav-hint.right{right:16px;}
+.demo-page-chip{position:fixed;top:12px;right:12px;z-index:10000;background:rgba(17,24,39,.78);color:#fff;padding:8px 12px;border-radius:10px;font:12px/1.2 'Noto Sans KR',sans-serif;}
+@media (max-width:768px){.demo-nav-zone{width:24vw;}}
+</style>
+
+</head>
+<body>
+    <svg class="svg-defs">
+        <defs>
+            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#ef4444"/>
+                <stop offset="50%" style="stop-color:#f59e0b"/>
+                <stop offset="100%" style="stop-color:#10b981"/>
+            </linearGradient>
+        </defs>
+    </svg>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-item">
+            <span class="sidebar-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+            </span>
+            대시보드
+        </div>
+        <div class="sidebar-item">
+            <span class="sidebar-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+            </span>
+            신청서 작성
+        </div>
+        <div class="sidebar-item">
+            <span class="sidebar-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+            </span>
+            진행 현황
+        </div>
+        <div class="sidebar-item active">
+            <span class="sidebar-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+            </span>
+            보완 리포트
+        </div>
+        <div class="sidebar-item">
+            <span class="sidebar-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </span>
+            문의하기
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">보완 리포트</h1>
+            <p class="page-subtitle">미진 항목을 우선순위대로 보완해 제출 가능성을 높입니다.</p>
+        </div>
+        
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Score Card -->
+                <div class="card">
+                    <div class="score-section">
+                        <div>
+                            <h3 class="card-title">현재 점수</h3>
+                            <div class="score-display">
+                                <span class="score-number">76</span>
+                                <span class="score-unit">점</span>
+                            </div>
+                        </div>
+                        <div class="gauge-container">
+                            <svg class="gauge-svg" viewBox="0 0 140 80">
+                                <path class="gauge-bg" d="M 20 70 A 50 50 0 0 1 120 70"/>
+                                <path class="gauge-fill" d="M 20 70 A 50 50 0 0 1 120 70"/>
+                            </svg>
+                            <div class="gauge-needle"></div>
+                            <div class="gauge-center"></div>
+                            <span class="gauge-label">최소 통과 조건</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="card-title">미진 사유</h3>
+                    <div class="issues-list">
+                        <div class="issue-item">
+                            <span class="issue-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            </span>
+                            <span class="issue-text">기술성 근거 부족</span>
+                        </div>
+                        <div class="issue-item">
+                            <span class="issue-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            </span>
+                            <span class="issue-text">고용 유지계획 근거 부족</span>
+                        </div>
+                        <div class="issue-item">
+                            <span class="issue-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            </span>
+                            <span class="issue-text">재무지표 설명 부족</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="card-title">최소 통과 조건</h3>
+                    <div class="conditions-list">
+                        <div class="condition-item">
+                            <span class="condition-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </span>
+                            <span class="condition-text">핵심 기술 검증근거 3개 추가</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="condition-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </span>
+                            <span class="condition-text">신규채용 2명 및 6개월 유지계획 명시</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="condition-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </span>
+                            <span class="condition-text">재무지표 3개년 추이 표 삽입</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="right-column">
+                <div class="priority-card">
+                    <h3 class="priority-title">우선 보완 순서 TOP 3</h3>
+                    
+                    <div class="priority-item">
+                        <span class="priority-number">1</span>
+                        <div class="priority-content">
+                            <div class="priority-item-title">고용·노무 증빙 보완</div>
+                            <div class="priority-item-desc">신규 채용 2명 이상 명시, 6개월 유지계획 작성</div>
+                        </div>
+                    </div>
+                    
+                    <div class="priority-item">
+                        <span class="priority-number">2</span>
+                        <div class="priority-content">
+                            <div class="priority-item-title">기술성 근거 보강</div>
+                            <div class="priority-item-desc">핵심 기술 근거 3개 추가, 구체적인 증빙자료 첨부</div>
+                        </div>
+                    </div>
+                    
+                    <div class="priority-item">
+                        <span class="priority-number">3</span>
+                        <div class="priority-content">
+                            <div class="priority-item-title">재무 설명 문단 보완</div>
+                            <div class="priority-item-desc">3개년 재무지표 추이 표 삽입, 설명 문단 추가</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-container">
+                        <button class="btn btn-primary">보완본 자동 작성</button>
+                        <button class="btn btn-secondary">전문가 검토 요청</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
