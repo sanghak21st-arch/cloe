@@ -635,5 +635,20 @@
             <button class="btn btn-primary">보완 항목 자동 반영</button>
         </div>
     </main>
+
+<div class="demo-nav-zone left" data-target="04-remediation.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="06-tier.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">3/5 · A05 평가위원 관점 비교</div>
+<script>
+(()=>{
+  const go=(u)=>window.location.href=u;
+  document.querySelector('.demo-nav-zone.left').addEventListener('click',()=>go('04-remediation.html'));
+  document.querySelector('.demo-nav-zone.right').addEventListener('click',()=>go('06-tier.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('04-remediation.html'); if(e.key==='ArrowRight')go('06-tier.html');});
+})();
+</script>
+
 </body>
 </html>

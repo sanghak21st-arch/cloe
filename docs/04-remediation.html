@@ -574,5 +574,20 @@
             </div>
         </div>
     </main>
+
+<div class="demo-nav-zone left" data-target="01-hero.html" title="이전"></div>
+<div class="demo-nav-zone right" data-target="05-persona.html" title="다음"></div>
+<div class="demo-nav-hint left">◀ 이전</div>
+<div class="demo-nav-hint right">다음 ▶</div>
+<div class="demo-page-chip">2/5 · A04 보완 리포트</div>
+<script>
+(()=>{
+  const go=(u)=>window.location.href=u;
+  document.querySelector('.demo-nav-zone.left').addEventListener('click',()=>go('01-hero.html'));
+  document.querySelector('.demo-nav-zone.right').addEventListener('click',()=>go('05-persona.html'));
+  window.addEventListener('keydown',(e)=>{if(e.key==='ArrowLeft')go('01-hero.html'); if(e.key==='ArrowRight')go('05-persona.html');});
+})();
+</script>
+
 </body>
 </html>
